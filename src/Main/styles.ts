@@ -20,10 +20,10 @@ export const ManuContainer = styled.View`
   flex: 1;
 `;
 
-export const FooterContainer = styled.SafeAreaView`
+export const Footer = styled.View`
+  padding: 16px 24px;
+  min-height: 120px;
   background: #fff;
 `;
 
-export const Footer = styled.View`
-  min-height: 120px;
-`;
+export const FooterContainer = styled.SafeAreaView``;
