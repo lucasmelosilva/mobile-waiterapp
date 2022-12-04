@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Modal, TouchableOpacity, Platform } from "react-native";
+import { Modal, TouchableOpacity } from "react-native";
+import { isAndroid } from "../../utils/isAndroid";
 import { Button } from "../Button";
 import { Close } from "../Icons/Close";
 import { Text } from "../Text";
@@ -12,8 +13,6 @@ interface TableModalProps {
   onSave: (table: string) => void;
 }
 
-const isAndroid = Platform.OS === "android";
-
 export function TableModal({ visible, onClose, onSave }: TableModalProps) {
   const [table, setTable] = useState("");
 
@@ -25,7 +24,7 @@ export function TableModal({ visible, onClose, onSave }: TableModalProps) {
 
   return (
     <Modal transparent visible={visible} animationType="fade">
-      <Overlay behavior={isAndroid ? "height" : "padding"}>
+      <Overlay behavior={isAndroid() ? "height" : "padding"}>
         <ModalBody>
           <Header>
             <Text weight="600">Informar a mesa</Text>
