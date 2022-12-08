@@ -1,0 +1,102 @@
+import { FlatList, TouchableOpacity } from "react-native";
+import { CartItem } from "../../types/CartItem";
+import { formatCurreny } from "../../utils/formatCurrency";
+import { Button } from "../Button";
+import { MinusCircle } from "../Icons/MinusCircle";
+import { PlusCircle } from "../Icons/PlusCircle";
+import { Text } from "../Text";
+import {
+  Item,
+  ProductContainer,
+  Actions,
+  Image,
+  QuantityContainer,
+  ProductDatails,
+  Summary,
+  TotalContainer,
+} from "./styles";
+
+interface CartProps {
+  cartItems: CartItem[];
+}
+
+export function Cart({ cartItems }: CartProps) {
+  if (cartItems.length < 0) {
+    return null;
+  }
+
+  const total = cartItems.reduce(
+    (acc, cartItem) => acc + cartItem.product.price * cartItem.quantity,
+    0
+  );
+
+  return (
+    <>
+      {cartItems.length > 0 && (
+        <FlatList
+          data={cartItems}
+          keyExtractor={(cartItem) => cartItem.product._id}
+          showsVerticalScrollIndicator={false}
+          style={{ marginBottom: 20, maxHeight: 150 }}
+          renderItem={({ item: cartItem }) => (
+            <Item>
+              <ProductContainer>
+                <Image
+                  source={{
+                    uri: `http://192.168.0.7:3001/uploads/${cartItem.product.imagePath}`,
+                  }}
+                />
+
+                <QuantityContainer>
+                  <Text size={14} color="#666">
+                    {cartItem.quantity}x
+                  </Text>
+                </QuantityContainer>
+
+                <ProductDatails>
+                  <Text size={14} weight="600">
+                    {cartItem.product.name}
+                  </Text>
+                  <Text size={15} color="#666" style={{ marginTop: 4 }}>
+                    {formatCurreny(cartItem.product.price)}
+                  </Text>
+                </ProductDatails>
+              </ProductContainer>
+
+              <Actions>
+                <TouchableOpacity style={{ marginRight: 24 }}>
+                  <PlusCircle />
+                </TouchableOpacity>
+
+                <TouchableOpacity>
+                  <MinusCircle />
+                </TouchableOpacity>
+              </Actions>
+            </Item>
+          )}
+        />
+      )}
+
+      <Summary>
+        <TotalContainer>
+          {cartItems.length > 0 ? (
+            <>
+              <Text color="#666">Total</Text>
+              <Text size={20} weight="600">
+                {formatCurreny(total)}
+              </Text>
+            </>
+          ) : (
+            <Text color="#999">Seu carrinho está vazio</Text>
+          )}
+        </TotalContainer>
+        <Button
+          onPress={() => alert("pedido confirmado")}
+          disabled={cartItems.length === 0 ? true : false}
+        >
+          Confirmar pedido
+        </Button>
+      </Summary>
+    </>
+  );
+}
